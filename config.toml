@@ -1,0 +1,15 @@
+baseURL = "https://SylviaHalbrooksArt.com/"
+languageCode = "en-us"
+title = "My Art Gallery"
+theme = "gallery"
+paginate = 12
+enableRobotsTXT = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[params]
+  gallery_title = "My Art Portfolio"
+  description = "A collection of my artwork"
+  lightbox = true

@@ -1,0 +1,22 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "My Art Gallery"
+enableRobotsTXT = true
+
+theme = ["gallery"]
+
+[pagination]
+  pagerSize = 12
+
+[module]
+  [[module.imports]]
+    path = "github.com/nicokaiser/hugo-theme-gallery/v4"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[params]
+  gallery_title = "My Art Portfolio"
+  description = "A collection of my artwork"
+  lightbox = true

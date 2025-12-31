@@ -1,0 +1,78 @@
+# create .github dir and write workflow (if you didn't already)
+mkdir -p .github/workflows
+
+# create the .gitignore (you can paste the contents above into this file)
+cat > .gitignore <<'EOF'
+/public/
+/resources/_gen/
+/.hugo_build.lock
+.DS_Store
+Thumbs.db
+node_modules/
+.vscode/
+.idea/
+npm-debug.log
+yarn-error.log
+EOF
+
+# create the workflow file (paste the YAML from above into the heredoc)
+cat > .github/workflows/deploy.yml <<'EOF'
+name: Build and deploy Hugo site to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "0.153.5"
+          extended: true
+
+      - name: Build site
+        run: hugo --minify
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+EOF
+
+# stage everything (includes files already staged)
+git add -A
+
+# commit
+git commit -m "Initial Hugo site import + add GitHub Actions workflow (Hugo 0.153.5)"
+
+# rename branch master -> main (if you prefer main)
+git branch -M main
+
+# add remote (only if you haven't already)
+git remote add origin git@github.com:sylviahalbrooks/portfolio.git
+
+# push to GitHub
+git push -u origin main
